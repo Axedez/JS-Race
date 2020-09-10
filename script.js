@@ -13,6 +13,7 @@ const keys = {
   ArrowLeft: false,
   ArrowRight: false,
 };
+Object.preventExtensions(keys);
 
 const setting = {
   start: false,
