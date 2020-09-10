@@ -4,7 +4,6 @@ const score = document.querySelector('.score'),
   car = document.createElement('div'),
   audio = new Audio('./public/need for speed.mp3');
 car.classList.add('car');
-
 start.addEventListener('click', startGame);
 document.addEventListener('keydown', startRun);
 document.addEventListener('keyup', stopRun);
@@ -128,6 +127,12 @@ function moveEnemy() {
       start.classList.remove('hide');
       start.style.top = score.offsetHeight;
       audio.pause();
+      if (setting.score > localStorage.getItem('record')) {
+        localStorage.setItem('record', setting.score);
+        score.textContent = 'Congratulations! New Record! SCORE:' + setting.score;
+      };
+
+      //localStorage.setItem(Math.random().toString(36).substr(2, 9), setting.score);
     }
     item.y += setting.speed / 1.3;
     item.style.top = item.y + 'px';
