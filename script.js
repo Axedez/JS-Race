@@ -2,8 +2,28 @@ const score = document.querySelector('.score'),
   start = document.querySelector('.start'),
   gameArea = document.querySelector('.gameArea'),
   car = document.createElement('div'),
+  easy = document.querySelector('.easy'),
+  medium = document.querySelector('.medium'),
+  hard = document.querySelector('.hard'),
   audio = new Audio('./public/need for speed.mp3');
 car.classList.add('car');
+easy.addEventListener('click', function () {
+  easy.classList.add('selected')
+  medium.classList.remove('selected')
+  hard.classList.remove('selected')
+});
+medium.addEventListener('click', function () {
+  easy.classList.remove('selected')
+  medium.classList.add('selected')
+  hard.classList.remove('selected')
+});
+hard.addEventListener('click', function () {
+  easy.classList.remove('selected')
+  medium.classList.remove('selected')
+  hard.classList.add('selected')
+});
+
+
 start.addEventListener('click', startGame);
 document.addEventListener('keydown', startRun);
 document.addEventListener('keyup', stopRun);
@@ -27,6 +47,18 @@ function getQuantityElements(heightElement) {
 }
 
 function startGame() {
+  if (easy.classList.contains('selected')) {
+
+    setting.speed = 6;
+    console.log('6')
+  } else if (medium.classList.contains('selected')) {
+    setting.speed = 12;
+    console.log()
+  } else {
+    setting.speed = 18;
+    console.log('18')
+  }
+
   audio.load();
   audio.play();
   start.classList.add('hide');
