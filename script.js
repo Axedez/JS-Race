@@ -1,7 +1,8 @@
 const score = document.querySelector('.score'),
   start = document.querySelector('.start'),
   gameArea = document.querySelector('.gameArea'),
-  car = document.createElement('div');
+  car = document.createElement('div'),
+  audio = new Audio('./public/need for speed.mp3');
 car.classList.add('car');
 
 start.addEventListener('click', startGame);
@@ -26,7 +27,11 @@ function getQuantityElements(heightElement) {
 }
 
 function startGame() {
+  audio.load();
+  audio.play();
   start.classList.add('hide');
+  gameArea.innerHTML = '';
+
 
   for (let i = 0; i < getQuantityElements(100); i++) {
     const line = document.createElement('div');
@@ -45,16 +50,23 @@ function startGame() {
     gameArea.appendChild(enemy);
 
   }
+  setting.score = 0;
   setting.start = true;
   gameArea.appendChild(car);
+  car.style.left = gameArea.offsetWidth / 2 - car.offsetWidth / 2;
+  car.style.top = 'auto';
+  car.style.bottom = '10px';
   setting.x = car.offsetLeft;
   setting.y = car.offsetTop;
   requestAnimationFrame(playGame);
+
 };
 
 function playGame() {
 
   if (setting.start) {
+    setting.score += setting.speed;
+    score.textContent = 'SCORE:' + setting.score;
     moveRoad();
     moveEnemy();
     if (keys.ArrowLeft && setting.x > 0) {
@@ -100,6 +112,18 @@ function moveRoad() {
 function moveEnemy() {
   let enemy = document.querySelectorAll('.enemy');
   enemy.forEach(function (item) {
+    let carRect = car.getBoundingClientRect();
+    let enemyRect = item.getBoundingClientRect();
+    if (carRect.top <= enemyRect.bottom &&
+      carRect.right >= enemyRect.left &&
+      carRect.left <= enemyRect.right &&
+      carRect.bottom >= enemyRect.top) {
+      setting.start = false;
+      console.warn('Crash');
+      start.classList.remove('hide');
+      start.style.top = score.offsetHeight;
+      audio.pause();
+    }
     item.y += setting.speed / 1.3;
     item.style.top = item.y + 'px';
     if (item.y >= document.documentElement.clientHeight) {
@@ -109,3 +133,4 @@ function moveEnemy() {
   });
 
 };
+console.log(keys);
